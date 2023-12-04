@@ -20,14 +20,16 @@
 # 1992: https://files.eric.ed.gov/fulltext/ED377253.pdf
 # 1993-2020: https://nces.ed.gov/programs/digest/current_tables.asp
 
-# the dictionaries associate the year (which the fiscal year ends with) 
-# with what percent of public elementary and secondary schools
+# the dictionaries associate the year (which the academic year ends with) 
+# with what percent of public elementary and secondary schools' (in the named region)
 # revenue came from each of the different funding sources, as well as the total funding;
 # if multiple reports reported on the same year, the first reported number was used
 # (out of convenience sake, this is likely less accurate of a method);
 # percentages are of revenue receipts & amounts are in thousands of dollars
 
-# nonrevenue receipts, they exist through 1981 (I forgot to record prior to 1981)
+# nonrevenue receipts, they exist through 1981 (I forgot to record prior to 1981),
+# these amounts should be subtracted from the corresponding total_funding_ amount
+# before diving the funding by the source percentages
 nonrev_ca = {1981: 112414}
 nonrev_us = {1981: 3925595}
 nonrev_tx = {1981: 441784}
@@ -58,16 +60,15 @@ prop_tax_ca = {2020: 28.6, 2019: 27.3, 2018: 28.1, 2017: 27.4, 2016: 25.9, 2015:
 prop_tax_us = {2020: 36.5, 2019: 36.5, 2018: 36.6, 2017: 36.6, 2016: 36.4, 2015: 36.4, 2014: 36.4, 2013: 36.8, 2012: 35.9, 2011: 35, 2010: 35.3}
 prop_tax_tx = {2020: 46.8, 2019: 47.2, 2018: 46.8, 2017: 46.1, 2016: 44.4, 2015: 44.6, 2014: 43.5, 2013: 43.7, 2012: 41.9, 2011: 40.1, 2010: 40.8}
 
-# starting with fiscal year ending in 2010 (part of the 2012 digest) private was considered part of
-# the Local (including intermediate) revenue, it will be considered Local for all years of graphing
+# starting with academic year ending in 2010 (part of the 2012 digest) private was considered part of
+# the Local (including Intermediate) revenue, it will be considered Local for all years of graphing
 private_perc_ca = {2009: 0.7, 2008: 0.8, 2007: 0.9, 2006: 0.9, 2005: 1, 2004: 1, 2003: 1, 2002: 1.1, 2001: 1, 2000: 1.1, 1999: 1.1, 1998: 1.1, 1997: 1.1, 1996: 1.2, 1995: 1.2, 1994: 1.1, 1993: 1.2, 1992: 1.2, 1991: 1.2}
 private_perc_us = {2009: 2.1, 2008: 2.1, 2007: 2.1, 2006: 2.2, 2005: 2.3, 2004: 2.3, 2003: 2.3, 2002: 2.3, 2001: 2.3, 2000: 2.4, 1999: 2.5, 1998: 2.6, 1997: 2.5, 1996: 2.6, 1995: 2.7, 1994: 2.7, 1993: 2.7, 1992: 2.7, 1991: 2.5}
 private_perc_tx = {2009: 2, 2008: 2.1, 2007: 2.1, 2006: 2.2, 2005: 2.2, 2004: 2.2, 2003: 2.2, 2002: 2.3, 2001: 2.3, 2000: 2.4, 1999: 2.5, 1998: 2.4, 1997: 2.5, 1996: 2.6, 1995: 2.8, 1994: 2.7, 1993: 2.9, 1992: 2.8, 1991: 2.9}
 
 # TEST --- sanity checks
-suf = ['ca', 'us', 'tx']
 for year in fed_perc_us:
-    for s in suf:
+    for s in ['ca', 'us', 'tx']:
 
         # check summation
         total_perc = globals()['fed_perc_'+s][year]+globals()['state_perc_'+s][year]+globals()['local_perc_'+s][year]
