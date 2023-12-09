@@ -13,7 +13,7 @@ plt.title("Funding Sources of California's Public Primary and Secondary Schools 
 plt.grid(zorder=1)
 plt.legend()
 plt.axvspan(1977.9, 1978.1, zorder=1, color='gray', alpha=0.7)
-plt.annotate("Prop 13 & AB 8", (1978.2, 14))
+plt.annotate("Prop 13", (1978.2, 14))
 plt.axvspan(2012.9, 2013.1, zorder=1, color='gray', alpha=0.7)
 plt.annotate("Prop 30", (2013.2, 16))
 plt.axvspan(1987.9, 1988.1, zorder=1, color='gray', alpha=0.7)
