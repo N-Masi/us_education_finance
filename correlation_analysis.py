@@ -1,6 +1,8 @@
 import pandas as pd
 import string
-from scipy.stats import linregress
+from scipy.stats import pearsonr
+import matplotlib.pyplot as plt
+import math
 
 # this looks at the correlation between meadian household income of districts and their
 # average expenditure per student
@@ -35,23 +37,23 @@ df_mhi.drop((934), axis=0, inplace=True)
 # get r^2
 x = []
 y = []
-c = 0
 for ind in df_pps.index:
     district = df_pps['Name'][ind]
     mhi = df_mhi[df_mhi['Name'].str.contains(district)]['MHI']
     if len(mhi) > 1: raise Exception("district name mismatch for district:", district)
     if mhi.iloc[0] == '250,000+': mhi.iloc[0] = '250000'
     if mhi.iloc[0] != '-':
-        x.append(df_pps['Expenditures_pp'][ind])
-        y.append(float(mhi.iloc[0]))
+        x.append(float(mhi.iloc[0]))
+        y.append(df_pps['Expenditures_pp'][ind])
 
-# df21 = pd.read_excel('data/currentexpense2021.xlsx')
-# df21.columns = list(string.ascii_uppercase)[0:len(df21.columns)]
-# df21.drop(range(10), axis=0, inplace=True)
-# df21.reset_index(drop=True, inplace=True)
-
-# df = pd.read_excel('data/currentexpense2122.xlsx')
-# df.columns = list(string.ascii_uppercase)[0:len(df.columns)]
-# df.drop(range(10), axis=0, inplace=True)
-# # df.drop(df[df['E']<100].index, inplace=True)
-# df.reset_index(drop=True, inplace=True)
+# plot figure - figure out two panels in the same
+fig, axs = plt.subplots(nrows=2, ncols=1)
+axs[0].set_title("Education Expenditures of Districts by Median Household Income", pad=20)
+axs[0].scatter(x, y, zorder=2)
+axs[0].grid(zorder=1)
+axs[0].set_ylabel("Expenditures Per Pupil", labelpad=5)
+axs[1].scatter(x, [math.log(yy) for yy in y], zorder=2)
+axs[1].grid(zorder=1)
+axs[1].set_xlabel("Median Household Income", labelpad=10)
+axs[1].set_ylabel("Log of Expenditures Per Pupil", labelpad=17)
+plt.show()
