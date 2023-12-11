@@ -16,30 +16,34 @@ df_pps.reset_index(drop=True, inplace=True)
 for ind in df_pps.index:
     district = df_pps['Name'][ind]
     if not ('San Lorenzo' in district):
-        if 'Thermalito' in district:
-            district = district.replace('Elementary', '')
         district = "".join(["(?=.*"+s+")" for s in district.split(" ")])
     df_pps['Name'][ind] = district
 
 # mhi = median houselhold income (field DP03_0062E of the American Community Survey (ACS) by the Census Bureau)
+# Districts with mutliple entries for broken up schools within were only looked at on the district level.
+# In a few cases, the CA Dept. of Educ. reported expenditures for combined elementary and high districts but the ACS
+# had reported median incomes for these districts separately, because the median incomes differed these instances were excluded
+# from the data (removed from the Excel files in the /data folder).
 # https://data.census.gov/table?g=040XX00US06,06$9500000,06$9600000,06$9700000&d=ACS%205-Year%20Estimates%20Data%20Profiles
 df_mhi = pd.read_csv('data/ACSDP5Y2022.DP03-Data.csv')
 df_mhi = df_mhi[['NAME', 'DP03_0062E']]
 df_mhi.columns = ['Name', 'MHI']
 df_mhi.drop(range(2), axis=0, inplace=True)
 df_mhi.reset_index(drop=True, inplace=True)
-df_mhi.drop((980), axis=0, inplace=True)
+df_mhi.drop((934), axis=0, inplace=True)
 
 # get r^2
 x = []
 y = []
+c = 0
 for ind in df_pps.index:
-    x.append(df_pps['Expenditures_pp'][ind])
     district = df_pps['Name'][ind]
     mhi = df_mhi[df_mhi['Name'].str.contains(district)]['MHI']
     if len(mhi) > 1: raise Exception("district name mismatch for district:", district)
     if mhi.iloc[0] == '250,000+': mhi.iloc[0] = '250000'
-    y.append(float(mhi.iloc[0]))
+    if mhi.iloc[0] != '-':
+        x.append(df_pps['Expenditures_pp'][ind])
+        y.append(float(mhi.iloc[0]))
 
 # df21 = pd.read_excel('data/currentexpense2021.xlsx')
 # df21.columns = list(string.ascii_uppercase)[0:len(df21.columns)]
