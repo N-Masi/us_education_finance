@@ -34,7 +34,7 @@ df_mhi.drop(range(2), axis=0, inplace=True)
 df_mhi.reset_index(drop=True, inplace=True)
 df_mhi.drop((934), axis=0, inplace=True)
 
-# get r^2
+# get data and print r^2
 x = []
 y = []
 for ind in df_pps.index:
@@ -45,6 +45,9 @@ for ind in df_pps.index:
     if mhi.iloc[0] != '-':
         x.append(float(mhi.iloc[0]))
         y.append(df_pps['Expenditures_pp'][ind])
+logy = [math.log(yy) for yy in y]
+print("Linear regression: r =", pearsonr(x, y)[0], "and r^2 =", pearsonr(x, y)[0]**2)
+print("Log regression: r =", pearsonr(x, logy)[0], "and r^2 =", pearsonr(x, logy)[0]**2)
 
 # plot figure - figure out two panels in the same
 fig, axs = plt.subplots(nrows=2, ncols=1)
@@ -52,7 +55,7 @@ axs[0].set_title("Education Expenditures of Districts by Median Household Income
 axs[0].scatter(x, y, zorder=2)
 axs[0].grid(zorder=1)
 axs[0].set_ylabel("Expenditures Per Pupil", labelpad=5)
-axs[1].scatter(x, [math.log(yy) for yy in y], zorder=2)
+axs[1].scatter(x, logy, zorder=2)
 axs[1].grid(zorder=1)
 axs[1].set_xlabel("Median Household Income", labelpad=10)
 axs[1].set_ylabel("Log of Expenditures Per Pupil", labelpad=17)
