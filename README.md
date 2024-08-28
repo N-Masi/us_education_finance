@@ -10,7 +10,14 @@ Data can be imported from `school_funding_sources.py`. The data is available in 
 
 The other files in the repositories give some examples of figures that can be generated with this data.
 
-![alt](images/fig1)
+From `ca_sources_graph.py`:
+![](images/fig1.png)
+
+From `ca_vs_us_graph.py`:
+![](images/fig4.png)
+
+From `correlation_analysis.py`:
+![](images/fig5.png)
 
 ---
 
